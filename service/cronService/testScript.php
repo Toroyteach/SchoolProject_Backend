@@ -64,40 +64,75 @@ function fetchAndStoreWeatherData($con)
             $pop_c = null;
             $windSpeed_c = $weatherData["current"]["wind_speed"] ?? null;
             $dateStamp_c = $weatherData["current"]["dt"] ?? null;
+            $weatherName = $weatherData["current"]["weather"][0]["main"] ?? null;
+            $weatherDesc = $weatherData["current"]["weather"][0]["description"] ?? null;
+            $weatherIconc = $weatherData["current"]["weather"][0]["icon"] ?? null;
 
-            $stmt = $con->prepare("INSERT INTO tbl_current_weather_data (user_id, location_id, temperature, wind_speed, rainfall, uvi, pop, date_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssddddds", $memberId, $locationId, $temperature_c, $windSpeed_c, $rainfall_c, $uvIndex_c, $pop_c, $dateStamp_c);
-            $stmt->execute();
 
-            //Extract Hourly weather Data
-            foreach ($weatherData['hourly'] as $locationH) {
-                $temperature_h = $locationH["temp"];
-                $rainfall_h = $locationH["rain"]["1h"] ?? null;
-                $uvIndex_h = $locationH["uvi"] ?? null;
-                $pop_h = $locationH["pop"] ?? null;
-                $windSpeed_h = $locationH["wind_speed"] ?? null;
-                $timeStamp_h = $locationH["dt"] ?? null;
+            $deleteQuery = "DELETE FROM tbl_current_weather_data WHERE user_id = ?";
+            $stmt = $con->prepare($deleteQuery);
+            $stmt->bind_param("i", $memberId);
 
-                $stmt = $con->prepare("INSERT INTO tbl_hourly_weather_data (user_id, location_id, temperature, wind_speed, rainfall, uvi, pop, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssddddds", $memberId, $locationId, $temperature_h, $windSpeed_h, $rainfall_h, $uvIndex_h, $pop_h, $timeStamp_h);
+            if($stmt->execute()){
+                $stmt = $con->prepare("INSERT INTO tbl_current_weather_data (user_id, location_id, temperature, wind_speed, rainfall, uvi, pop, weather, description, icon, date_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssdddddssss", $memberId, $locationId, $temperature_c, $windSpeed_c, $rainfall_c, $uvIndex_c, $pop_c ,$weatherName, $weatherDesc, $weatherIconc, $dateStamp_c);
                 $stmt->execute();
+
             }
 
 
+            //analyse data for Hourly data
+            $deleteQuery = "DELETE FROM tbl_hourly_weather_data WHERE user_id = ?";
+            $stmt = $con->prepare($deleteQuery);
+            $stmt->bind_param("i", $memberId);
+    
+            if ($stmt->execute()) {
+    
+                //Extract Hourly weather Data
+                foreach ($weatherData['hourly'] as $locationH) {
+                    $temperature_h = $locationH["temp"];
+                    $rainfall_h = $locationH["rain"]["1h"] ?? null;
+                    $uvIndex_h = $locationH["uvi"] ?? null;
+                    $pop_h = $locationH["pop"] ?? null;
+                    $timeStamp_h = $locationH["dt"] ?? null;
+                    $windSpeed_h = $locationH["wind_speed"] ?? null;
+                    $weatherName_h = $locationH["weather"][0]["main"] ?? null;
+                    $weatherDesc_h = $locationH["weather"][0]["description"] ?? null;
+                    $weatherIcon_h = $locationH["weather"][0]["icon"] ?? null;
+        
+                    $stmt = $con->prepare("INSERT INTO tbl_hourly_weather_data (user_id, location_id, temperature, wind_speed, rainfall, uvi, pop, weather, description, icon, time_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    $stmt->bind_param("ssdddddssss", $memberId, $locationId, $temperature_h, $windSpeed_h, $rainfall_h, $uvIndex_h, $pop_h, $weatherName_h, $weatherDesc_h, $weatherIcon_h, $timeStamp_h);
+                    $stmt->execute();
+                }
 
-            //Extract Daily weather Data
-            foreach ($weatherData['daily'] as $locationD) {
-                $temperature_d = $locationD["temp"]["day"];
-                $rainfall_d = $locationD["rain"] ?? null;
-                $uvIndex_d = $locationD["uvi"] ?? null;
-                $pop_d = $locationD["pop"] ?? null;
-                $windSpeed_d = $locationD["wind_speed"] ?? null;
-                $dateStamp_d = $locationD["dt"] ?? null;
+            } 
+    
 
-                $stmt = $con->prepare("INSERT INTO tbl_daily_weather_data (user_id, location_id, temperature, wind_speed, rainfall, uvi, pop, date_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                $stmt->bind_param("ssddddds", $memberId, $locationId, $temperature_d, $windSpeed_d, $rainfall_d, $uvIndex_d, $pop_d, $dateStamp_d);
-                $stmt->execute();
+            //Analyse data for Daily current data
+            $deleteQuery = "DELETE FROM tbl_daily_weather_data WHERE user_id = ?";
+            $stmt = $con->prepare($deleteQuery);
+            $stmt->bind_param("i", $memberId);
+    
+            if ($stmt->execute()) {
+
+                //Extract Daily weather Data
+                foreach ($weatherData['daily'] as $locationD) {
+                    $temperature_d = $locationD["temp"]["day"];
+                    $rainfall_d = $locationD["rain"] ?? null;
+                    $uvIndex_d = $locationD["uvi"] ?? null;
+                    $pop_d = $locationD["pop"] ?? null;
+                    $windSpeed_d = $locationD["wind_speed"] ?? null;
+                    $dateStamp_d = $locationD["dt"] ?? null;
+                    $weatherName_d = $locationD["weather"][0]["main"] ?? null;
+                    $weatherDesc_d = $locationD["weather"][0]["description"] ?? null;
+                    $weatherIcon_d = $locationD["weather"][0]["icon"] ?? null;
+        
+                    $stmt = $con->prepare("INSERT INTO tbl_daily_weather_data (user_id, location_id, temperature, wind_speed, rainfall, uvi, pop, weather, description, icon, date_stamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    $stmt->bind_param("ssdddddssss", $memberId, $locationId, $temperature_d, $windSpeed_d, $rainfall_d, $uvIndex_d, $pop_d, $weatherName_d, $weatherDesc_d, $weatherIcon_d, $dateStamp_d);
+                    $stmt->execute();
+                }
             }
+
 
 
             //Extract Weather Alerts if any
@@ -112,6 +147,8 @@ function fetchAndStoreWeatherData($con)
                 $stmt->bind_param("ssssss", $memberId, $locationId, $alertName, $startTime, $endTime, $description);
                 $stmt->execute();
             }
+
+            $stmt->close();
         }
 
         echo 'success';

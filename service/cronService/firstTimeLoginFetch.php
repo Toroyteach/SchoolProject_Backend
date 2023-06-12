@@ -127,6 +127,8 @@ function get_town_name($lat, $lng)
         return $result['address']['town'];
     } elseif (isset($result['address']['city'])) {
         return $result['address']['city'];
+    } elseif (isset($result['address']['state'])) {
+        return $result['address']['state'];
     } else {
         return '';
     }

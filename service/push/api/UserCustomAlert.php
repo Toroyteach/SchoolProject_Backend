@@ -27,6 +27,7 @@ class UserCustomAlert
         $sqlQuery = "SELECT  " . $this->db_table . ".*, tbl_push_options.option_name FROM " . $this->db_table . " INNER JOIN tbl_push_options ON tbl_push_options.option_id = tbl_user_push_preferences.option_id";
         $stmt = $this->conn->prepare($sqlQuery);
         $stmt->execute();
+
         return $stmt->get_result();
     }
 
@@ -50,8 +51,10 @@ class UserCustomAlert
             $this->created_at = $row['created_at'];
             $this->user_message = $row['user_message'];
             $this->option_name = $row['option_name'];
+            $stmt->close();
             return true;
         } else {
+            $stmt->close();
             return false;
         }
     }
@@ -80,8 +83,10 @@ class UserCustomAlert
             $stmt->bind_param("iisdds", $user_id, $option_id, $notification_id, $max_value, $min_value, $user_message);
 
             if ($stmt->execute()) {
+                $stmt->close();
                 return true;
             } else {
+                $stmt->close();
                 return false;
             }
         }
@@ -95,8 +100,10 @@ class UserCustomAlert
         $stmt->bind_param("iiiss", $option_id, $max_value, $min_value, $user_message, $id);
 
         if ($stmt->execute()) {
+            $stmt->close();
             return true;
         } else {
+            $stmt->close();
             return false;
         }
     }
@@ -109,8 +116,10 @@ class UserCustomAlert
         $stmt->bind_param("i", $id);
 
         if ($stmt->execute()) {
+            $stmt->close();
             return true;
         } else {
+            $stmt->close();
             return false;
         }
     }
@@ -125,7 +134,7 @@ class UserCustomAlert
 
         $notifications = array();
 
-        if ($stmt->num_rows > 0) {
+        if ($result->num_rows > 0) {
 
             while ($row = $result->fetch_assoc()) {
                 $notification = array(
@@ -146,10 +155,10 @@ class UserCustomAlert
                 "data" => $notifications,
                 "status" => true,
             );
-
+            $stmt->close();
             return $response;
         } else {
-
+            $stmt->close();
             return false;
         }
     }
@@ -168,12 +177,12 @@ class UserCustomAlert
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
         $result = $stmt->get_result();
-        
+
         $notifications = array();
 
-        if ($stmt->num_rows > 0) {
-            
-    
+        if ($result->num_rows > 0) {
+
+
             while ($row = $result->fetch_assoc()) {
                 $notification = array(
                     "id" => $row['notification_id'],
@@ -189,17 +198,15 @@ class UserCustomAlert
                 );
                 $notifications[] = $notification;
             }
-    
+
             $response = array(
                 "data" => $notifications,
                 "status" => false,
             );
-
+            $stmt->close();
             return $response;
-
-
         } else {
-
+            $stmt->close();
             return false;
         }
     }
@@ -214,8 +221,10 @@ class UserCustomAlert
         $stmt->bind_param("si", $date, $notificationId);
 
         if ($stmt->execute()) {
+            $stmt->close();
             return true;
         } else {
+            $stmt->close();
             return false;
         }
     }
@@ -227,8 +236,10 @@ class UserCustomAlert
         $stmt->bind_param("i", $notificationId);
 
         if ($stmt->execute()) {
+            $stmt->close();
             return true;
         } else {
+            $stmt->close();
             return false;
         }
     }
@@ -254,6 +265,8 @@ class UserCustomAlert
             "data" => $notifications,
             "status" => true,
         );
+
+        $stmt->close();
 
         return $response;
     }

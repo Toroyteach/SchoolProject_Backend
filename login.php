@@ -34,18 +34,17 @@ if (isset($_POST['submit'])) {
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <title>LOGIN PAGE</title>
    <meta name="viewport" content="width=device-width, initial-scale=1">
-
    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-
    <link rel="stylesheet" href="assets/css/style.css">
-
-   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 </head>
 
 <body class="bg-dark">
-   <div class="">
+   <div class="loginContainer" style="min-height: 90vh">
       <div class="container">
-         <div class="login-content">
+         <div class="login-content" style="position:relative; top: 200px;">
+         <div style="align-items: center;">
+            <h1>Custom Weather Administrator</h1>
+         </div>
             <div class="login-form">
                <form method="post">
                   <div class="form-group">

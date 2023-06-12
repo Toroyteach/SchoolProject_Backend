@@ -31,7 +31,7 @@ if (isset($_GET['id']) && isset($_GET['table'])) {
 $sql = "select * from contact_us order by id asc";
 $res = mysqli_query($con, $sql);
 ?>
-<div class="content pb-0">
+<div class="content pb-0" style="position: relative; min-height: 77vh; overflow-y: auto;">
 	<div class="orders">
 		<div class="row">
 			<div class="col-xl-12">

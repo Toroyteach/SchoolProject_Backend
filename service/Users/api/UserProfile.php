@@ -48,13 +48,13 @@ class UserProfile
         // }
     }
 
-    public function updateUserData($id, $username, $password, $email, $phone)
+    public function updateUserData($id, $username, $email, $phone)
     {
         $device_token = "";
         $status = "";
-        $sqlQuery = "UPDATE " . $this->db_table . " SET username = ?, password = ?, email = ?, phone = ? WHERE id = ?";
+        $sqlQuery = "UPDATE " . $this->db_table . " SET username = ?, email = ?, phone = ? WHERE id = ?";
         $stmt = $this->conn->prepare($sqlQuery);
-        $stmt->bind_param("ssssi", $username, $password, $email, $phone, $id);
+        $stmt->bind_param("sssi", $username, $email, $phone, $id);
 
         if ($stmt->execute()) {
 
@@ -81,6 +81,7 @@ class UserProfile
 
             return $response;
         } else {
+            $stmt->close();
             return false;
         }
     }
@@ -122,6 +123,7 @@ class UserProfile
         }
 
         $userNoticeCount['status'] = true;
+        $stmt->close();
 
         return $userNoticeCount;
     }
@@ -153,6 +155,7 @@ class UserProfile
 
             return $response;
         } else {
+            $stmt->close();
             return false;
         }
     }
@@ -183,6 +186,7 @@ class UserProfile
 
                 return $response;
             } else {
+                $stmt->close();
                 return false;
             }
         } else {
@@ -198,9 +202,10 @@ class UserProfile
         $stmt->bind_param("si", $password, $id);
 
         if ($stmt->execute()) {
-
+            $stmt->close();
             return true;
         } else {
+            $stmt->close();
             return false;
         }
     }
@@ -220,6 +225,7 @@ class UserProfile
 
             return $response;
         } else {
+            $stmt->close();
             return false;
         }
     }
@@ -242,6 +248,8 @@ class UserProfile
             return $result['address']['town'];
         } elseif (isset($result['address']['city'])) {
             return $result['address']['city'];
+        } elseif (isset($result['address']['state'])) {
+            return $result['address']['state'];
         } else {
             return '';
         }
@@ -259,25 +267,22 @@ class UserProfile
 
         //if ($stmt->num_rows < 0) {
 
-            $currentWeatherDatas = array();
+        $row = $result->fetch_assoc();
 
-            while ($row = $result->fetch_assoc()) {
-                $currentWeatherData = array(
-                    "date_stamp" => $row['date_stamp'],
-                    "temperature" => $row['temperature'],
-                    "uvi" => $row['uvi'],
-                    "wind_speed" => $row['wind_speed'],
-                    "rainfall" => $row['rainfall'],
-                    "pop" => $row['pop'],
-                    "weather" => $row['weather'],
-                    "description" => $row['description'],
-                    "icon" => $row['icon'],
-                    "location" => $row['location']
-                );
-                $currentWeatherDatas[] = $currentWeatherData;
-            }
+        $currentWeatherData = array(
+            "date_stamp" => $row['date_stamp'],
+            "temperature" => $row['temperature'],
+            "uvi" => $row['uvi'],
+            "wind_speed" => $row['wind_speed'],
+            "rainfall" => $row['rainfall'],
+            "pop" => $row['pop'] ?? null,
+            "weather" => $row['weather'],
+            "description" => $row['description'],
+            "icon" => $row['icon'],
+            "location" => $row['location']
+        );
 
-            $dataArray["current"] = $currentWeatherDatas;
+        $dataArray["current"] = $currentWeatherData;
 
         //}
 
@@ -289,25 +294,25 @@ class UserProfile
 
         //if ($stmt->num_rows > 0) {
 
-            $hourlyWeatherDatas = array();
+        $hourlyWeatherDatas = array();
 
-            while ($row = $result->fetch_assoc()) {
-                $hourlyWeatherData = array(
-                    "time_stamp" => $row['time_stamp'],
-                    "temperature" => $row['temperature'],
-                    "uvi" => $row['uvi'],
-                    "wind_speed" => $row['wind_speed'],
-                    "rainfall" => $row['rainfall'],
-                    "pop" => $row['pop'],
-                    "weather" => $row['weather'],
-                    "description" => $row['description'],
-                    "icon" => $row['icon'],
-                    "location" => $row['location']
-                );
-                $hourlyWeatherDatas[] = $hourlyWeatherData;
-            }
+        while ($row = $result->fetch_assoc()) {
+            $hourlyWeatherData = array(
+                "time_stamp" => $row['time_stamp'],
+                "temperature" => $row['temperature'],
+                "uvi" => $row['uvi'],
+                "wind_speed" => $row['wind_speed'],
+                "rainfall" => $row['rainfall'] ?? 0,
+                "pop" => $row['pop'],
+                "weather" => $row['weather'],
+                "description" => $row['description'],
+                "icon" => $row['icon'],
+                "location" => $row['location']
+            );
+            $hourlyWeatherDatas[] = $hourlyWeatherData;
+        }
 
-            $dataArray["hourly"] = $hourlyWeatherDatas;
+        $dataArray["hourly"] = $hourlyWeatherDatas;
 
         //}
 
@@ -319,27 +324,29 @@ class UserProfile
 
         //if ($stmt->num_rows > 0) {
 
-            $dailyWeatherDatas = array();
+        $dailyWeatherDatas = array();
 
-            while ($row = $result->fetch_assoc()) {
-                $dailyWeatherData = array(
-                    "date_stamp" => $row['date_stamp'],
-                    "temperature" => $row['temperature'],
-                    "uvi" => $row['uvi'],
-                    "wind_speed" => $row['wind_speed'],
-                    "rainfall" => $row['rainfall'],
-                    "pop" => $row['pop'],
-                    "weather" => $row['weather'],
-                    "description" => $row['description'],
-                    "icon" => $row['icon'],
-                    "location" => $row['location']
-                );
-                $dailyWeatherDatas[] = $dailyWeatherData;
-            }
+        while ($row = $result->fetch_assoc()) {
+            $dailyWeatherData = array(
+                "date_stamp" => $row['date_stamp'],
+                "temperature" => $row['temperature'],
+                "uvi" => $row['uvi'],
+                "wind_speed" => $row['wind_speed'],
+                "rainfall" => $row['rainfall'] ?? 0,
+                "pop" => $row['pop'],
+                "weather" => $row['weather'],
+                "description" => $row['description'],
+                "icon" => $row['icon'],
+                "location" => $row['location']
+            );
+            $dailyWeatherDatas[] = $dailyWeatherData;
+        }
 
-            $dataArray["daily"] = $dailyWeatherDatas;
+        $dataArray["daily"] = $dailyWeatherDatas;
 
         //}
+
+        $stmt->close();
 
         $response = array(
             "data" => $dataArray,
@@ -347,5 +354,21 @@ class UserProfile
         );
 
         return $response;
+    }
+
+
+    public function createFeedBack($name, $email, $mobile, $comment, $subject)
+    {
+
+        $stmt = $this->conn->prepare("INSERT INTO contact_us (name, email, mobile, comment, subject) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $name, $email, $mobile, $comment, $subject);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
     }
 }

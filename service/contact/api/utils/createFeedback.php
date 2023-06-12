@@ -6,33 +6,32 @@
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
     require_once '../../../../connection.inc.php';
-    include_once '../UserProfile.php';
-    
+    include_once '../../../Users/api/UserProfile.php';
+
     $item = new UserProfile($con);
-    $item->id = isset($_GET['id']) ? $_GET['id'] : die();
 
-    // Check if the request contains the necessary data for updating a user
-    if (isset($_POST['username'], $_POST['email'], $_POST['phone'])) {
+    // Check if the request contains the necessary data for creating a new alert
+    if (isset($_POST['name'], $_POST['email'], $_POST['mobile'], $_POST['comment'], $_POST['subject'])) {
         // Assign the data from the request to variables
-        $username = $_POST['username'];
+        $name = $_POST['name'];
         $email = $_POST['email'];
-        $phone = $_POST['phone'];
-
-        $userData = $item->updateUserData($item->id, $username, $email, $phone);
+        $mobile = $_POST['mobile'];
+        $comment = $_POST['comment'];
+        $subject = $_POST['subject'];
     
         // Add the new user custom alert
-        if (!empty($userData)) {
+        if ($item->createFeedBack($name, $email, $mobile, $comment, $subject)) {
             // Alert created successfully
             http_response_code(201);
-            echo json_encode($userData);
+            echo json_encode(array("message" => "User FeedBack created."));
         } else {
             // Failed to create the alert
             http_response_code(500);
-            echo json_encode(array("message" => "Failed to Update user."));
+            echo json_encode(array("message" => "Failed to create user feedback."));
         }
     } else {
         // Required data not provided in the request
         http_response_code(400);
-        echo json_encode(array("message" => "Missing required data for updating user."));
+        echo json_encode(array("message" => "Missing required data for creating feedback."));
     }
 ?>

@@ -1,5 +1,3 @@
-<canvas id="myCanvas"></canvas>
-<div for="myCanvas"></div>
 <script type="text/javascript">
     var myCanvas = document.getElementById("myCanvas");
     myCanvas.width = 500;
@@ -26,16 +24,7 @@
         ctx.restore();
     }
 
-    function drawPieSlice(
-        ctx,
-        centerX,
-        centerY,
-        radius,
-        startAngle,
-        endAngle,
-        fillColor,
-        strokeColor
-    ) {
+    function drawPieSlice( ctx, centerX, centerY, radius, startAngle, endAngle, fillColor, strokeColor) {
         ctx.save();
         ctx.fillStyle = fillColor;
         ctx.strokeStyle = strokeColor;

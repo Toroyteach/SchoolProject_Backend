@@ -44,7 +44,7 @@ if(isset($_GET['id']) && isset($_GET['table'])) {
 }
 ?>
 
-<div class="container mt-5" style="position: relative; top: 50px;">
+<div class="container mt-5" style="position: relative; top: 50px; min-height: 77vh; overflow-y: auto;">
     <h2>Push Notification Management</h2>
     <hr>
 

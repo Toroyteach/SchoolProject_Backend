@@ -49,7 +49,7 @@ if(isset($_GET['id']) && isset($_GET['table'])) {
 }
 ?>
 
-<div class="container mt-5" style="position: relative; top: 50px;">
+<div class="container mt-5" style="position: relative; top: 50px; min-height: 77vh;">
     <h2>Weather Data Management</h2>
     <hr>
 
@@ -70,7 +70,7 @@ if(isset($_GET['id']) && isset($_GET['table'])) {
     </ul>
 
     <!-- Tab panes -->
-    <div class="tab-content mt-3">
+    <div class="tab-content mt-3" style="position:relative; max-height: 60vh; overflow-y: auto;">
         <div class="tab-pane container active" id="locations">
             <?php
             // Fetch and display user locations from the database

@@ -34,14 +34,14 @@ $res = mysqli_query($con, $sql);
 
 ?>
 
-<div class="content pb-0">
+<div class="content pb-0" style="position: relative; min-height: 77vh;">
 	<div class="orders">
 		<div class="row">
 			<div class="col-xl-12">
-				<div class="card">
+				<div class="card" style="position:relative; max-height: 60vh; overflow-y: auto;">
 					<div class="card-body">
 						<h4 class="box-title">Manage Users </h4>
-						<h4 class="box-link"><a href="Users.php" class="btn btn-success">ADD User</a> </h4>
+						<!-- <h4 class="box-link"><a href="Users.php" class="btn btn-success">ADD User</a> </h4> -->
 					</div>
 					<div class="card-body--">
 						<div class="table-stats order-table ov-h">
