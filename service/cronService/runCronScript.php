@@ -7,6 +7,7 @@ $username = "root";
 $password = "";
 
 
+
 //Api details
 $apiKey = "d626ab9680a021943d5dd2f6982aba01";
 $apiEndpoint = "https://api.openweathermap.org/data/3.0/onecall";
@@ -14,11 +15,12 @@ $apiEndpoint = "https://api.openweathermap.org/data/3.0/onecall";
 // Create connection
 
 $con = mysqli_connect($servername, $username, $password, $database);
+//$con = mysqli_connect("localhost", "toroytea_admin", "gV1LXV+EXW}$", "toroytea_ecom");
 
 if (!$con->connect_error) {
 
     //call the functions here
-    //fetchAndStoreWeatherData($con);
+    fetchAndStoreWeatherData($con);
 
     mysqli_close($con);
 } else {

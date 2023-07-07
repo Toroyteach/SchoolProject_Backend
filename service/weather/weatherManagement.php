@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 require('../../top.inc.php');
 isAdmin();
 
@@ -241,4 +241,5 @@ if(isset($_GET['id']) && isset($_GET['table'])) {
 
 <?php
 require('../../footer.inc.php');
+ob_end_flush();
 ?>

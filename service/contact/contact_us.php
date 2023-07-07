@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require('../../top.inc.php');
 isAdmin();
 if (isset($_GET['id']) && isset($_GET['table'])) {
@@ -48,6 +49,7 @@ $res = mysqli_query($con, $sql);
 										<th>Name</th>
 										<th>Email</th>
 										<th>Mobile NO.</th>
+										<th>Title</th>
 										<th>Message</th>
 										<th>Date</th>
 										<th></th>
@@ -63,6 +65,7 @@ $res = mysqli_query($con, $sql);
 											<td><?php echo $row['email'] ?></td>
 											<td><?php echo $row['mobile'] ?></td>
 											<td><?php echo $row['comment'] ?></td>
+											<td><?php echo $row['subject'] ?></td>
 											<td><?php echo $row['added_on'] ?></td>
 											<td>
 												<?php
@@ -83,4 +86,5 @@ $res = mysqli_query($con, $sql);
 </div>
 <?php
 require('../../footer.inc.php');
+ob_end_flush();
 ?>

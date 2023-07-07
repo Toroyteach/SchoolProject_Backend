@@ -5,7 +5,7 @@ $msg = '';
 if (isset($_POST['submit'])) {
    $username = get_safe_value($con, $_POST['username']);
    $password = get_safe_value($con, $_POST['password']);
-   $sql = "select * from admin_users where username='$username' and password='$password'";
+   $sql = "SELECT * FROM admin_users WHERE username='$username' AND password='$password'";
    $res = mysqli_query($con, $sql);
    $count = mysqli_num_rows($res);
    if ($count > 0) {
@@ -43,7 +43,7 @@ if (isset($_POST['submit'])) {
       <div class="container">
          <div class="login-content" style="position:relative; top: 200px;">
          <div style="align-items: center;">
-            <h1>Custom Weather Administrator</h1>
+            <h1>Administrator Login</h1>
          </div>
             <div class="login-form">
                <form method="post">

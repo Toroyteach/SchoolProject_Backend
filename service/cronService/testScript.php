@@ -14,6 +14,7 @@ $apiEndpoint = "https://api.openweathermap.org/data/3.0/onecall";
 // Create connection
 
 $con = mysqli_connect($servername, $username, $password, $database);
+//$con_prod = mysqli_connect("localhost", "toroytea_admin", "gV1LXV+EXW}$", "toroytea_ecom");
 
 if (!$con->connect_error) {
 

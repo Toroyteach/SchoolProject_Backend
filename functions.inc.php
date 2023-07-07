@@ -3,6 +3,7 @@
 global $baseUrl;
 
 $baseUrl = "http://localhost/schoolProject/testTwo/admin/";
+$prodUrl = "https://schoolproject.toroyteach.com/";
 
 function pr($arr)
 {

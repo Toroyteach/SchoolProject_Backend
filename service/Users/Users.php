@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require('../../top.inc.php');
 isAdmin();
 $username = '';
@@ -274,4 +275,5 @@ if (isset($_POST['submitTest'])) {
 
 <?php
 require('../../footer.inc.php');
+ob_end_flush();
 ?>

@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require('../../top.inc.php');
 isAdmin();
 if (isset($_GET['type']) && $_GET['type'] != '') {
@@ -96,4 +97,5 @@ $res = mysqli_query($con, $sql);
 </div>
 <?php
 require('../../footer.inc.php');
+ob_end_flush();
 ?>

@@ -4,32 +4,29 @@ require('../../top.inc.php');
 isAdmin();
 
 // Handle the Delete
-if(isset($_GET['id']) && isset($_GET['table'])) {
+if (isset($_GET['id']) && isset($_GET['table'])) {
     $id = $_GET['id'];
     $table = $_GET['table'];
 
     // Validate and sanitize the table name to prevent SQL injection
     $allowedTables = ['tbl_push_options', 'tbl_user_push_preferences', 'tbl_firebase_notification_history'];
-    if(in_array($table, $allowedTables)) {
+    if (in_array($table, $allowedTables)) {
         // Perform the deletion query
-        
-        if($table == 'tbl_push_options'){
+
+        if ($table == 'tbl_push_options') {
 
             $query = "DELETE FROM $table WHERE option_id = '$id'";
-
-        } elseif($table == 'tbl_user_push_preferences') {
+        } elseif ($table == 'tbl_user_push_preferences') {
 
             $query = "DELETE FROM $table WHERE id = '$id'";
-
-        } elseif($table == 'tbl_firebase_notification_history') {
+        } elseif ($table == 'tbl_firebase_notification_history') {
 
             $query = "DELETE FROM $table WHERE notification_id = '$id'";
-
         }
-        
+
         $result = mysqli_query($con, $query);
 
-        if($result) {
+        if ($result) {
             // Deletion was successful, redirect back to the current page
             header("Location: pushNotificationManagement.php");
             exit();
@@ -47,7 +44,6 @@ if(isset($_GET['id']) && isset($_GET['table'])) {
 <div class="container mt-5" style="position: relative; top: 50px; min-height: 77vh; overflow-y: auto;">
     <h2>Push Notification Management</h2>
     <hr>
-
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -64,7 +60,8 @@ if(isset($_GET['id']) && isset($_GET['table'])) {
     <!-- Tab panes -->
     <div class="tab-content mt-3">
         <div class="tab-pane container active" id="pushNotification">
-        <?php
+            <h4 class="box-link"><a href="createPushNotifications.php" class="btn btn-success">Add Push Options</a> </h4>
+            <?php
             // Fetch and display user locations from the database
             $stmt = $con->prepare("SELECT * FROM tbl_push_options");
             $stmt->execute();
@@ -97,7 +94,7 @@ if(isset($_GET['id']) && isset($_GET['table'])) {
             ?>
         </div>
         <div class="tab-pane container fade" id="memberPushNotification">
-        <?php
+            <?php
             // Fetch and display user locations from the database
             $stmt = $con->prepare("SELECT tbl_user_push_preferences.*, tbl_member.username, tbl_push_options.option_name FROM tbl_user_push_preferences INNER JOIN tbl_member ON tbl_member.id = tbl_user_push_preferences.user_id INNER JOIN tbl_push_options ON tbl_push_options.option_id = tbl_user_push_preferences.option_id");
             $stmt->execute();
@@ -137,7 +134,7 @@ if(isset($_GET['id']) && isset($_GET['table'])) {
             ?>
         </div>
         <div class="tab-pane container fade" id="pushNotificationHistoru">
-        <?php
+            <?php
             // Fetch and display user locations from the database
             $stmt = $con->prepare("SELECT tbl_firebase_notification_history.*, tbl_member.username, tbl_push_options.option_name FROM tbl_firebase_notification_history INNER JOIN tbl_member ON tbl_member.id = tbl_firebase_notification_history.member_id INNER JOIN tbl_push_options ON tbl_push_options.option_id = tbl_firebase_notification_history.option_id");
             $stmt->execute();

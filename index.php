@@ -66,19 +66,19 @@ echo "<script>var chartData = $json_data;</script>";
 		<div class="container">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Users</h5>
+                <h5 class="card-title">Members Registered</h5>
                 <p class="card-text"><?php echo $userCount; ?></p>
             </div>
         </div>
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Notifications</h5>
+                <h5 class="card-title">Members Notification Selected</h5>
                 <p class="card-text"><?php echo $notificationCount; ?></p>
             </div>
         </div>
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Push Options</h5>
+                <h5 class="card-title">Push Notifications Options</h5>
                 <p class="card-text"><?php echo $itemCount; ?></p>
             </div>
         </div>

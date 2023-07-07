@@ -66,6 +66,7 @@ class UserCustomAlert
         $option_id  = null;
         $other_option_data  = null;
         $created_at = null;
+        $option_slug = null;
 
 
         $sqlQuery = "SELECT * FROM tbl_push_options WHERE option_name = ?";
@@ -76,7 +77,7 @@ class UserCustomAlert
 
         if ($stmt->num_rows > 0) {
 
-            $stmt->bind_result($option_id, $option_name, $other_option_data, $created_at);
+            $stmt->bind_result($option_id, $option_name, $option_slug, $other_option_data, $created_at);
             $stmt->fetch();
 
             $stmt = $this->conn->prepare("INSERT INTO " . $this->db_table . " (user_id, option_id, notification_id, max_value, min_value, user_message) VALUES (?, ?, ?, ?, ?, ?)");
@@ -201,7 +202,7 @@ class UserCustomAlert
 
             $response = array(
                 "data" => $notifications,
-                "status" => false,
+                "status" => true,
             );
             $stmt->close();
             return $response;

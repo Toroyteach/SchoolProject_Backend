@@ -3,7 +3,7 @@ require('connection.inc.php');
 require('functions.inc.php');
 
 if (!isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN'] === '') {
-   $redirectURL = $baseUrl.'login.php';
+   $redirectURL = $baseUrl . 'login.php';
 
    header("Location: $redirectURL");
 
@@ -45,6 +45,10 @@ if (!isset($_SESSION['ADMIN_LOGIN']) && $_SESSION['ADMIN_LOGIN'] === '') {
 
                   <li class="menu-item-has-children dropdown">
                      <a href="<?php echo $baseUrl; ?>service/weather/weatherManagement.php"> WEATHER DATA </a>
+                  </li>
+
+                  <li class="menu-item-has-children dropdown">
+                     <a href="<?php echo $baseUrl; ?>service/news/newsManagement.php">NEWS INFORMATION </a>
                   </li>
 
                   <li class="menu-item-has-children dropdown">
